@@ -62,7 +62,15 @@ export default function App() {
     const messageToSend = text || input.trim();
     if (!messageToSend || !gozRef.current || isTyping) return;
 
+    const lastMessage = messages[messages.length - 1];
+    const shouldLogEvidence =
+      lastMessage?.role === 'model' && Boolean(lastMessage.isMicroAction);
+
     if (!text) setInput('');
+
+    if (shouldLogEvidence) {
+      logWin(messageToSend);
+    }
     
     setMessages(prev => [...prev, { role: 'user', text: messageToSend }]);
     setIsTyping(true);
@@ -305,7 +313,7 @@ export default function App() {
                         </div>
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white mb-2 md:mb-4">Build Your Evidence</h2>
                         <p className="text-brand-200 text-base md:text-xl font-medium max-w-2xl mx-auto">
-                          Self-trust is built on proof, not promises. Select a specialized pathway to decode your patterns and start logging the evidence of your growth.
+                         Track your actions. Log your wins. Build self-trust through real evidence.
                         </p>
                       </motion.div>
 
@@ -359,21 +367,6 @@ export default function App() {
                               <ReactMarkdown>{msg.text}</ReactMarkdown>
                             </div>
                             
-                            {msg.isMicroAction && (
-                              <motion.button
-                                whileHover={{ scale: 1.02, translateY: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => {
-                                  const action = msg.text.split(/MICRO-ACTION:/i)[1]?.trim() || "Completed micro-action";
-                                  logWin(action);
-                                  alert("Evidence logged in your Self-Trust Ledger!");
-                                }}
-                                className="mt-4 md:mt-6 w-full flex items-center justify-center gap-2 md:gap-3 bg-brand-400 text-brand-900 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-xs md:text-sm shadow-xl hover:bg-brand-300 transition-all"
-                              >
-                                <Plus size={16} />
-                                LOG AS EVIDENCE
-                              </motion.button>
-                            )}
                           </div>
                         </motion.div>
 
