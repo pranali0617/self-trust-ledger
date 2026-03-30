@@ -1,4 +1,4 @@
-import {generateChatResponse} from '../src/server/chat';
+import {generateChatResponse} from './_lib/chat';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
