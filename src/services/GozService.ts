@@ -26,7 +26,12 @@ export class GozService {
       });
 
       if (!response.ok) {
-        throw new Error(`Chat request failed with status ${response.status}`);
+        const errorPayload = await response.json().catch(async () => ({error: await response.text()}));
+        const errorMessage =
+          typeof errorPayload?.error === 'string' && errorPayload.error.trim()
+            ? errorPayload.error
+            : `Chat request failed with status ${response.status}`;
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

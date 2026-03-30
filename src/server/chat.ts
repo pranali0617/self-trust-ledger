@@ -134,7 +134,7 @@ export async function generateChatResponse(
       console.error('Groq API error:', errorText);
       return {
         status: response.status,
-        body: {error: 'Groq request failed'},
+        body: {error: `Groq request failed: ${errorText}`},
       };
     }
 
@@ -149,7 +149,10 @@ export async function generateChatResponse(
     console.error('Error communicating with Groq:', error);
     return {
       status: 500,
-      body: {error: 'Failed to generate a response'},
+      body: {
+        error:
+          error instanceof Error ? `Failed to generate a response: ${error.message}` : 'Failed to generate a response',
+      },
     };
   }
 }
